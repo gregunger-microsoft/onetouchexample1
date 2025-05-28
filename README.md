@@ -4,7 +4,7 @@ This project provides a one-click deployment for Simple Chat to Azure Commercial
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregunger-microsoft%2Fonetouchexample1%2Frefs%2Fheads%2Fmain%2Fmain.json)
 
-[![Deploy to Azure](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregunger-microsoft%2Fonetouchexample1%2Frefs%2Fheads%2Fmain%2Fmain.json)
+[![Deploy to Azure](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregunger-microsoft%2Fonetouchexample1%2Frefs%2Fheads%2Fmain%2Fmain.json)
 
 ## How to Use
 
