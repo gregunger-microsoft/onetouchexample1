@@ -1,4 +1,4 @@
-# My Azure Solution
+# Simple Chat One-Touch Deployer to Azure
 
 This project provides a one-click deployment for Simple Chat to Azure Commercial.
 
