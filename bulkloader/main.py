@@ -14,7 +14,7 @@ import logging
 # Replace with your Azure App Service and Microsoft Entra ID details
 TENANT_ID = "6bc5b33e-bc05-493c-b076-8f8ce1331515"  # Directory (tenant) ID
 CLIENT_ID = "37d7a13d-a5b5-48a6-972f-428cbf316bd9"  # Application (client) ID for your client app
-CLIENT_SECRET = "~z3dJUUXe~4DhQ9.Z7_cg8JVMt6lyjm7QE"  # Client secret for your client app (use certificates in production)
+CLIENT_SECRET = ""  # Client secret for your client app (use certificates in production)
 API_SCOPE = "api://37d7a13d-a5b5-48a6-972f-428cbf316bd9/.default" # Or a specific scope defined for your API, e.g., "api://<your-api-client-id>/.default" for application permissions
 API_ENDPOINT_URL = "https://web-8000.azurewebsites.us/api/group_bulk_documents/upload" # Your custom API endpoint for document upload
 UPLOAD_DIRECTORY = "./test-documents"  # Local directory containing files to upload
