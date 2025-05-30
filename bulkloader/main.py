@@ -6,14 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # --- Configuration ---
-# Replace with your Azure App Service and Microsoft Entra ID details
-TENANT_ID = "6bc5b33e-bc05-493c-b076-8f8ce1331515"  # Directory (tenant) ID
-CLIENT_ID = "37d7a13d-a5b5-48a6-972f-428cbf316bd9"  # Application (client) ID for your client app
-CLIENT_SECRET = os.getenv("MYSECRET")  # Client secret for your client app (use certificates in production)
-API_SCOPE = "api://37d7a13d-a5b5-48a6-972f-428cbf316bd9/.default" # Or a specific scope defined for your API, e.g., "api://<your-api-client-id>/.default" for application permissions
-API_BASE_URL = "https://web-8000.azurewebsites.us"  # Base URL for your API
+# From environment variables for security
+TENANT_ID = os.getenv("AZURE_TENANT_ID")  # Directory (tenant) ID
+CLIENT_ID = os.getenv("AZURE_CLIENT_ID")  # Application (client) ID for your client app
+CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET")  # Client secret for your client app (use certificates in production)
+API_SCOPE = os.getenv("API_SCOPE") # Or a specific scope defined for your API, e.g., "api://<your-api-client-id>/.default" for application permissions
+API_BASE_URL = os.getenv("API_BASE_URL") # Base URL for your API
 API_ENDPOINT_URL = f"{API_BASE_URL}/api/group_bulk_documents/upload", API_BASE_URL # Your custom API endpoint for document upload
-UPLOAD_DIRECTORY = "./test-documents"  # Local directory containing files to upload
+UPLOAD_DIRECTORY = os.getenv("UPLOAD_DIRECTORY")  # Local directory containing files to upload
+
 USER_ID = "e81deb4e-839d-40e2-b0fc-020a90ec5f60"  # User ID for the upload
 ACTIVE_GROUP_OID = "496bd544-817a-4eb2-85da-576a0146b106"  # Active group OID for the upload
 
