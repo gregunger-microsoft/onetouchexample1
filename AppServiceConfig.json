@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.35.1.17967",
-      "templateHash": "17965289105345172921"
+      "templateHash": "5257516428411243893"
     }
   },
   "parameters": {
@@ -87,21 +87,7 @@
           "ftpsState": "FtpsOnly",
           "minTlsVersion": "1.2",
           "acrUseManagedIdentityCreds": true,
-          "acrUserManagedIdentityID": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')), '2023-01-31').clientId]",
-          "appSettings": [
-            {
-              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-              "value": "true"
-            },
-            {
-              "name": "AZURE_COSMOS_AUTHENTICATION_TYPE",
-              "value": "key"
-            },
-            {
-              "name": "CLIENT_ID",
-              "value": "[parameters('appRegistrationClientId')]"
-            }
-          ]
+          "acrUserManagedIdentityID": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')), '2023-01-31').clientId]"
         }
       },
       "dependsOn": [
@@ -162,7 +148,10 @@
       "apiVersion": "2024-04-01",
       "name": "[format('{0}/{1}', variables('appServiceName'), 'appsettings')]",
       "properties": {
-        "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "YOUR_CLIENT_SECRET_VALUE"
+        "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "YOUR_CLIENT_SECRET_VALUE",
+        "DOCKER_REGISTRY_SERVER_URL": "[variables('acrLoginServer')]",
+        "WEBSITES_CONTAINER_STARTUP_COMMAND": "echo Hello",
+        "CLIENT_ID": "[parameters('appRegistrationClientId')]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
