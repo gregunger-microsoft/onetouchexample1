@@ -1,0 +1,171 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.35.1.17967",
+      "templateHash": "5135545202492652902"
+    }
+  },
+  "parameters": {
+    "appRegistrationClientId": {
+      "type": "string",
+      "defaultValue": "7e15ff63-82ef-4232-8e54-ac2318bfd85d"
+    },
+    "tenantId": {
+      "type": "string",
+      "defaultValue": "[subscription().tenantId]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "createdDateTime": {
+      "type": "string",
+      "defaultValue": "[utcNow('yyyy-MM-dd HH:mm:ss')]"
+    }
+  },
+  "variables": {
+    "managedIdentityName": "mi-greg-delete-1",
+    "appServicePlanName": "asp-greg-delete-1",
+    "appServicePlanSku": "P1V3",
+    "appServiceName": "app-greg-delete-1",
+    "acrLoginServer": "acr8000.azurecr.io",
+    "imageName": "simple-chat:2025-05-28_16",
+    "clientSecretSettingName": "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET",
+    "tags": {
+      "Environment": "test",
+      "Owner": "gregunger@microsoft.com",
+      "CreatedDateTime": "[parameters('createdDateTime')]",
+      "Project": "GregTest"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2023-01-31",
+      "name": "[variables('managedIdentityName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]"
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2024-04-01",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "sku": {
+        "name": "[variables('appServicePlanSku')]",
+        "tier": "[split(variables('appServicePlanSku'), 'V')[0]]"
+      },
+      "kind": "linux",
+      "properties": {
+        "reserved": true
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2024-04-01",
+      "name": "[variables('appServiceName')]",
+      "location": "[parameters('location')]",
+      "tags": "[variables('tags')]",
+      "kind": "app,linux,container",
+      "identity": {
+        "type": "SystemAssigned, UserAssigned",
+        "userAssignedIdentities": {
+          "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')))]": {}
+        }
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "linuxFxVersion": "[format('DOCKER|{0}:{1}', variables('acrLoginServer'), variables('imageName'))]",
+          "alwaysOn": "[and(and(not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Free')), not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Shared'))), not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Basic')))]",
+          "ftpsState": "FtpsOnly",
+          "minTlsVersion": "1.2",
+          "acrUseManagedIdentityCreds": true,
+          "acrUserManagedIdentityID": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName')), '2023-01-31').clientId]",
+          "appSettings": [
+            {
+              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+              "value": "true"
+            },
+            {
+              "name": "AZURE_COSMOS_AUTHENTICATION_TYPE",
+              "value": "key"
+            },
+            {
+              "name": "CLIENT_ID",
+              "value": "[parameters('appRegistrationClientId')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('managedIdentityName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2024-04-01",
+      "name": "[format('{0}/{1}', variables('appServiceName'), 'authsettingsV2')]",
+      "properties": {
+        "globalValidation": {
+          "requireAuthentication": true,
+          "unauthenticatedClientAction": "RedirectToLoginPage",
+          "redirectToProvider": "AzureActiveDirectory"
+        },
+        "httpSettings": {
+          "forwardProxy": {
+            "convention": "Standard"
+          }
+        },
+        "identityProviders": {
+          "azureActiveDirectory": {
+            "enabled": true,
+            "registration": {
+              "clientId": "[parameters('appRegistrationClientId')]",
+              "clientSecretSettingName": "[variables('clientSecretSettingName')]",
+              "openIdIssuer": "[format('https://login.microsoftonline.us/{0}/v2.0', parameters('tenantId'))]"
+            },
+            "login": {
+              "disableWWWAuthenticate": false
+            },
+            "validation": {
+              "allowedAudiences": [
+                "[format('api://{0}', parameters('appRegistrationClientId'))]",
+                "[format('https://{0}.azurewebsites.us', variables('appServiceName'))]"
+              ]
+            }
+          }
+        },
+        "login": {
+          "tokenStore": {
+            "enabled": true
+          }
+        },
+        "platform": {
+          "enabled": true,
+          "runtimeVersion": "~1"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2024-04-01",
+      "name": "[format('{0}/{1}', variables('appServiceName'), 'appsettings')]",
+      "properties": {
+        "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "YOUR_CLIENT_SECRET_VALUE"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ]
+    }
+  ]
+}

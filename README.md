@@ -8,7 +8,9 @@ This project provides a one-click deployment for Simple Chat to Azure Commercial
 
 ## How to Use
 
-1.  Click the "Deploy to Azure" button above to deploy.
-2.  You will be redirected to the Azure portal.
-3.  Provide a argument names for the given parameters.
-4.  Review the settings and click "Create" to deploy.
+1. Click the "Deploy to Azure" button above to deploy.
+2. You will be redirected to the Azure portal.
+3. Provide a argument names for the given parameters.
+4. Review the settings and click "Create" to deploy.
+
+az bicep build --file AppServiceConfig.bicep
