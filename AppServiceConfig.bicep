@@ -1,5 +1,7 @@
 // Bicep template for deploying an Azure App Service with a User Assigned Managed Identity, AAD Authentication, and other configurations.
 param appRegistrationClientId string = '7e15ff63-82ef-4232-8e54-ac2318bfd85d'
+@secure()
+param secretValue string = ''
 param tenantId string = subscription().tenantId
 param location string = resourceGroup().location
 param createdDateTime string = utcNow('yyyy-MM-dd HH:mm:ss')
@@ -121,7 +123,7 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: appService
   properties: {
     CLIENT_ID: appRegistrationClientId
-    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'hoH8Q~vxU~WXcmI1RwgFrVwBk0t0uUe3rK6oYawS'
+    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: secretValue
     DOCKER_REGISTRY_SERVER_URL: 'https://${acrLoginServer}'
     DOCKER_REGISTRY_SERVER_PASSWORD: ''
     DOCKER_REGISTRY_SERVER_USERNAME: ''
