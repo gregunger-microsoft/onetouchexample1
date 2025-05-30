@@ -1,13 +1,6 @@
-# https://github.com/microsoft/simplechat/commit/a306adfc7d223b031855007db758a543e7b5552b
-# POST https://web-8000.azurewebsites.us/api/group_bulk_documents/upload ^
-#         -F "file=@Downloads/nospaces-VA.pdf" ^
-#         -F "userId=e81deb4e-839d-40e2-b0fc-020a90ec5f60" ^
-#         -F "activeGroupOid=496bd544-817a-4eb2-85da-576a0146b106"
-
 import os
 import requests
 from msal import ConfidentialClientApplication
-#import json
 import logging
 
 # --- Configuration ---
