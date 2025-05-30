@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.35.1.17967",
-      "templateHash": "1753387982617883002"
+      "templateHash": "237356097432457766"
     }
   },
   "parameters": {
@@ -149,7 +149,7 @@
       "name": "[format('{0}/{1}', variables('appServiceName'), 'appsettings')]",
       "properties": {
         "CLIENT_ID": "[parameters('appRegistrationClientId')]",
-        "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "YOUR_CLIENT_SECRET_VALUE",
+        "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "hoH8Q~vxU~WXcmI1RwgFrVwBk0t0uUe3rK6oYawS",
         "DOCKER_REGISTRY_SERVER_URL": "[format('https://{0}', variables('acrLoginServer'))]",
         "DOCKER_REGISTRY_SERVER_PASSWORD": "",
         "DOCKER_REGISTRY_SERVER_USERNAME": "",

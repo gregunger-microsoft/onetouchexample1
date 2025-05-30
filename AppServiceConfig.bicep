@@ -121,7 +121,7 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: appService
   properties: {
     CLIENT_ID: appRegistrationClientId
-    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'YOUR_CLIENT_SECRET_VALUE'
+    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'hoH8Q~vxU~WXcmI1RwgFrVwBk0t0uUe3rK6oYawS'
     DOCKER_REGISTRY_SERVER_URL: 'https://${acrLoginServer}'
     DOCKER_REGISTRY_SERVER_PASSWORD: ''
     DOCKER_REGISTRY_SERVER_USERNAME: ''
