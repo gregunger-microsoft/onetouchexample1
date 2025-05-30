@@ -53,7 +53,7 @@ def get_access_token():
         logger.error(f"An unexpected error occurred during token acquisition: {e}")
         return None
 
-def upload_document(file_path, access_token):
+def upload_document(file_path, user_id, active_group_id, access_token):
     """
     Uploads a single document to the custom API.
 
@@ -69,8 +69,8 @@ def upload_document(file_path, access_token):
         "Authorization": f"Bearer {access_token}"
     }
     data = {
-        'userId': USER_ID,
-        'activeGroupOid': ACTIVE_GROUP_OID
+        'userId': user_id,
+        'activeGroupOid': active_group_id
     }
 
     try:
@@ -133,7 +133,8 @@ def main():
             logger.info(f"Skipping {filename}: Not a supported file type.")
             continue
 
-        if upload_document(file_path, access_token):
+        # TO DO > THIS NEEDS TO USE MAP FILE
+        if upload_document(file_path, USER_ID, ACTIVE_GROUP_OID, access_token):
             uploaded_count += 1
         else:
             failed_uploads.append(filename)
