@@ -1,4 +1,5 @@
 import os
+import csv
 import requests
 from msal import ConfidentialClientApplication
 import logging
@@ -105,10 +106,50 @@ def upload_document(file_path, user_id, active_group_id, access_token):
         logger.error(f"An unexpected error occurred while processing {file_name}: {e}")
         return False
 
+def read_csv_ignore_header(file_path):
+    """
+    Opens a CSV file, skips the header, and reads it line by line.
+
+    Args:
+        file_path (str): The path to the CSV file.
+    """
+    if not os.path.exists(file_path):
+        print(f"Error: File not found at '{file_path}'")
+        return
+
+    try:
+        with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+            csv_reader = csv.reader(file)
+
+            # Skip the header row
+            header = next(csv_reader, None)
+            if header:
+                print(f"Header row skipped: {header}")
+            else:
+                print("Warning: CSV file is empty or has no header.")
+
+            # Read the rest of the file line by line
+            line_number = 1 # Start from 1 after header
+            for row in csv_reader:
+                print(f"Line {line_number}: {row}")
+                # You can process each 'row' (which is a list of strings) here
+                line_number += 1
+
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' was not found.")
+    except Exception as e:
+        print(f"An error occurred while reading the CSV file: {e}")
+
+
 def main():
     """
     Main function to iterate through files and upload them.
     """
+    logger.info("Reading map file...")
+    read_csv_ignore_header('map.csv')  # Example usage of the CSV reading function
+    logger.info("Map file processed...")
+    # return
+
     if not os.path.isdir(UPLOAD_DIRECTORY):
         logger.error(f"Error: Directory '{UPLOAD_DIRECTORY}' not found.")
         return
