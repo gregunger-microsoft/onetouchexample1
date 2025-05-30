@@ -64,11 +64,6 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
       minTlsVersion: '1.2'
       acrUseManagedIdentityCreds: true
       acrUserManagedIdentityID: managedIdentity.properties.clientId
-      appSettings: [
-        { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'true' }
-        { name: 'AZURE_COSMOS_AUTHENTICATION_TYPE', value: 'key' }
-        { name: 'CLIENT_ID', value: appRegistrationClientId }
-      ]
     }
   }
   dependsOn: [
@@ -126,5 +121,8 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   parent: appService
   properties: {
     MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'YOUR_CLIENT_SECRET_VALUE'
+    DOCKER_REGISTRY_SERVER_URL: acrLoginServer
+    WEBSITES_CONTAINER_STARTUP_COMMAND: 'echo Hello'
+    CLIENT_ID: appRegistrationClientId
   }
 }
