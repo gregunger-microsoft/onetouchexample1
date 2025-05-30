@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.35.1.17967",
-      "templateHash": "5257516428411243893"
+      "templateHash": "1753387982617883002"
     }
   },
   "parameters": {
@@ -148,10 +148,12 @@
       "apiVersion": "2024-04-01",
       "name": "[format('{0}/{1}', variables('appServiceName'), 'appsettings')]",
       "properties": {
+        "CLIENT_ID": "[parameters('appRegistrationClientId')]",
         "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET": "YOUR_CLIENT_SECRET_VALUE",
-        "DOCKER_REGISTRY_SERVER_URL": "[variables('acrLoginServer')]",
-        "WEBSITES_CONTAINER_STARTUP_COMMAND": "echo Hello",
-        "CLIENT_ID": "[parameters('appRegistrationClientId')]"
+        "DOCKER_REGISTRY_SERVER_URL": "[format('https://{0}', variables('acrLoginServer'))]",
+        "DOCKER_REGISTRY_SERVER_PASSWORD": "",
+        "DOCKER_REGISTRY_SERVER_USERNAME": "",
+        "WEBSITES_CONTAINER_STARTUP_COMMAND": ""
       },
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"

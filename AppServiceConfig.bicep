@@ -64,7 +64,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
       minTlsVersion: '1.2'
       acrUseManagedIdentityCreds: true
       acrUserManagedIdentityID: managedIdentity.properties.clientId
-    }
+    } 
   }
   dependsOn: [
     // ACR role assignment might be needed here if ACR is in different RG/Sub and MI needs time
@@ -120,9 +120,11 @@ resource appSettings 'Microsoft.Web/sites/config@2024-04-01' = {
   name: 'appsettings'
   parent: appService
   properties: {
-    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'YOUR_CLIENT_SECRET_VALUE'
-    DOCKER_REGISTRY_SERVER_URL: acrLoginServer
-    WEBSITES_CONTAINER_STARTUP_COMMAND: 'echo Hello'
     CLIENT_ID: appRegistrationClientId
+    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET: 'YOUR_CLIENT_SECRET_VALUE'
+    DOCKER_REGISTRY_SERVER_URL: 'https://${acrLoginServer}'
+    DOCKER_REGISTRY_SERVER_PASSWORD: ''
+    DOCKER_REGISTRY_SERVER_USERNAME: ''
+    WEBSITES_CONTAINER_STARTUP_COMMAND: ''
   }
 }
