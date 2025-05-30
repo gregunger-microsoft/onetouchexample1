@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.35.1.17967",
-      "templateHash": "5135545202492652902"
+      "templateHash": "17965289105345172921"
     }
   },
   "parameters": {
@@ -32,7 +32,8 @@
     "appServicePlanSku": "P1V3",
     "appServiceName": "app-greg-delete-1",
     "acrLoginServer": "acr8000.azurecr.io",
-    "imageName": "simple-chat:2025-05-28_16",
+    "imageName": "simple-chat",
+    "imageTag": "2025-05-28_16",
     "clientSecretSettingName": "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET",
     "tags": {
       "Environment": "test",
@@ -81,7 +82,7 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
         "httpsOnly": true,
         "siteConfig": {
-          "linuxFxVersion": "[format('DOCKER|{0}:{1}', variables('acrLoginServer'), variables('imageName'))]",
+          "linuxFxVersion": "[format('DOCKER|{0}/{1}:{2}', variables('acrLoginServer'), variables('imageName'), variables('imageTag'))]",
           "alwaysOn": "[and(and(not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Free')), not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Shared'))), not(equals(reference(resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName')), '2024-04-01', 'full').sku.tier, 'Basic')))]",
           "ftpsState": "FtpsOnly",
           "minTlsVersion": "1.2",

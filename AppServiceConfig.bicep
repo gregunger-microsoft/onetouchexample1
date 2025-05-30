@@ -9,7 +9,8 @@ var appServicePlanName = 'asp-greg-delete-1'
 var appServicePlanSku = 'P1V3'
 var appServiceName = 'app-greg-delete-1'
 var acrLoginServer = 'acr8000.azurecr.io'
-var imageName = 'simple-chat:2025-05-28_16'
+var imageName = 'simple-chat'
+var imageTag = '2025-05-28_16'
 
 var clientSecretSettingName = 'MICROSOFT_PROVIDER_AUTHENTICATION_SECRET'
 
@@ -57,7 +58,7 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
     serverFarmId: appServicePlan.id
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: 'DOCKER|${acrLoginServer}:${imageName}'
+      linuxFxVersion: 'DOCKER|${acrLoginServer}/${imageName}:${imageTag}'
       alwaysOn: appServicePlan.sku.tier != 'Free' && appServicePlan.sku.tier != 'Shared' && appServicePlan.sku.tier != 'Basic' // Example, P1V3 should be true
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
